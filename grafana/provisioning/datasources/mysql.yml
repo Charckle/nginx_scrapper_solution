@@ -1,0 +1,13 @@
+apiVersion: 1
+
+datasources:
+  - name: Nginx Monitoring MySQL
+    uid: nginx-monitoring-mysql
+    type: mysql
+    access: proxy
+    url: mysql:3306
+    user: nginx_monitor
+    jsonData:
+      database: nginx_monitoring
+    secureJsonData:
+      password: changeme

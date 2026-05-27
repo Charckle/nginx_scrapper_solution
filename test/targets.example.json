@@ -1,0 +1,21 @@
+{
+  "timeout_seconds": 5,
+  "targets": [
+    {
+      "ip": "127.0.0.1",
+      "host": "example.local",
+      "port": 8081,
+      "path": "/",
+      "calls": 50,
+      "user_agent": "NginxMonitorTest/1.0"
+    },
+    {
+      "ip": "127.0.0.1",
+      "host": "example.local",
+      "port": 8081,
+      "path": "/api/health",
+      "calls": 25,
+      "user_agent": "Googlebot"
+    }
+  ]
+}

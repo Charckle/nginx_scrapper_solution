@@ -1,0 +1,7 @@
+config.json
+test/targets.json
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/

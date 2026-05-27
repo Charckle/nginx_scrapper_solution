@@ -1,0 +1,107 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "normal" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "success" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "fail" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, success_count AS value, 'success' AS metric FROM nginx_daily_traffic WHERE site = '$site' ORDER BY day",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, fail_count AS value, 'fail' AS metric FROM nginx_daily_traffic WHERE site = '$site' ORDER BY day",
+          "refId": "B"
+        }
+      ],
+      "title": "Filtered traffic per day (success / fail)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": ["nginx"],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+        "definition": "SELECT DISTINCT site FROM nginx_daily_traffic ORDER BY site",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Site",
+        "multi": false,
+        "name": "site",
+        "options": [],
+        "query": "SELECT DISTINCT site FROM nginx_daily_traffic ORDER BY site",
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-90d", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Nginx daily traffic",
+  "uid": "nginx-daily-traffic",
+  "version": 2
+}

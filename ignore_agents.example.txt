@@ -1,0 +1,10 @@
+# One substring per line (case-insensitive match against User-Agent).
+Googlebot
+bingbot
+AhrefsBot
+SemrushBot
+DotBot
+PetalBot
+Bytespider
+curl/
+python-requests

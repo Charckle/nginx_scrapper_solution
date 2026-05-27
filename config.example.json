@@ -1,0 +1,17 @@
+{
+  "sites": [
+    {
+      "name": "example",
+      "log_dir": "/var/log/nginx/example",
+      "log_file": "access.log"
+    }
+  ],
+  "ignore_agents_file": "ignore_agents.txt",
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "nginx_monitor",
+    "password": "changeme",
+    "database": "nginx_monitoring"
+  }
+}

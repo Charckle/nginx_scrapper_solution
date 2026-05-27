@@ -1,0 +1,162 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "ALL (combined)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#1f78c1", "mode": "fixed" } },
+              { "id": "custom.lineWidth", "value": 3 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 11, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "options": {
+        "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, success_count AS value, site AS metric FROM nginx_daily_traffic ORDER BY day",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, SUM(success_count) AS value, 'ALL (combined)' AS metric FROM nginx_daily_traffic GROUP BY day ORDER BY day",
+          "refId": "B"
+        }
+      ],
+      "title": "Success — all sites + combined",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "ALL (combined)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#e31a1c", "mode": "fixed" } },
+              { "id": "custom.lineWidth", "value": 3 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 11, "w": 24, "x": 0, "y": 11 },
+      "id": 2,
+      "options": {
+        "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, fail_count AS value, site AS metric FROM nginx_daily_traffic ORDER BY day",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, SUM(fail_count) AS value, 'ALL (combined)' AS metric FROM nginx_daily_traffic GROUP BY day ORDER BY day",
+          "refId": "B"
+        }
+      ],
+      "title": "Fail — all sites + combined",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "align": "auto", "displayMode": "auto" },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "site" },
+            "properties": [{ "id": "custom.width", "value": 200 }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+      "id": 3,
+      "options": {
+        "showHeader": true,
+        "sortBy": [{ "desc": true, "displayName": "success_count" }]
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "datasource": { "type": "mysql", "uid": "nginx-monitoring-mysql" },
+          "format": "table",
+          "rawSql": "SELECT site, success_count, fail_count, success_count + fail_count AS total, updated_at FROM nginx_daily_traffic WHERE day = (SELECT MAX(day) FROM nginx_daily_traffic) UNION ALL SELECT 'ALL (combined)' AS site, SUM(success_count) AS success_count, SUM(fail_count) AS fail_count, SUM(success_count) + SUM(fail_count) AS total, MAX(updated_at) AS updated_at FROM nginx_daily_traffic WHERE day = (SELECT MAX(day) FROM nginx_daily_traffic) ORDER BY site = 'ALL (combined)' DESC, site",
+          "refId": "A"
+        }
+      ],
+      "title": "Latest day — per site and combined",
+      "type": "table"
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": ["nginx"],
+  "templating": { "list": [] },
+  "time": { "from": "now-90d", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Nginx traffic — all sites",
+  "uid": "nginx-traffic-all-sites",
+  "version": 1
+}
